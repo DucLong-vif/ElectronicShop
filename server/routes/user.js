@@ -2,11 +2,12 @@ const router = require('express').Router();
 const {verifyAccessToken,isAdmin} = require('../middleware/verifyToken')
 const userC = require('../controllers/userController');
 router.post('/register',userC.register);
-router.get('/login',userC.login);
+router.post('/finalregister/:token',userC.finalRegister);
+router.post('/login',userC.login);
 router.get('/current',verifyAccessToken,userC.getCurrent);
 router.post('/refreshToken',userC.refreshAccessToken);
 router.get('/logout',userC.logout);
-router.get('/forgotPassword',userC.forgotPassword);
+router.post('/forgotPassword',userC.forgotPassword);
 router.put('/resetPassword',userC.resetPassword);
 router.get('/',[verifyAccessToken,isAdmin],userC.getUsers);
 router.delete('/',[verifyAccessToken,isAdmin],userC.deleteUser);

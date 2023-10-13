@@ -10,7 +10,7 @@ const Home = () => {
   // console.log(categories)
   return (
     <>
-      <div className='w-main flex'>
+      <div className='w-main flex mt-6'>
           <div className='flex flex-col gap-5 w-[25%] flex-auto border'>
               <Sidebar/>
               <DealDaily/>

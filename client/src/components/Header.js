@@ -30,15 +30,16 @@ const Header = () => {
           </span>
         </div>
 
-        <div className='flex items-center justify-center gap-2 px-6 border-r'>
+        <div className='cursor-pointer flex items-center justify-center gap-2 px-6 border-r'>
           <icons.BsCartCheckFill color='red'/>
           <span>
             0 item(s)
           </span>
         </div>
 
-        <div className='flex items-center justify-center px-6'>
-          <icons.BiSolidUserPin size={24}/>
+        <div className='cursor-pointer flex items-center justify-center px-6 gap-2'>
+          <icons.BiSolidUserPin color='red'/>
+          <span>Profile</span>
         </div>
       </div>
     </div>

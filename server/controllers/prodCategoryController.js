@@ -5,7 +5,7 @@ const createProdCategory = asyncHandler(async(req,res)=>{
     const response = await ProductCategory.create(req.body);
     return res.status(200).json({
         response : response ? true : false,
-        createdCategory : response ? response : 'cannot create new product-category'
+        createdCategory : response ? response : 'Không thể tạo danh mục sản phẩm mới'
     })
 })
 
@@ -13,7 +13,7 @@ const getAllProdCategory = asyncHandler(async(req,res)=>{
     const response = await ProductCategory.find();
     return res.status(200).json({
         response : response ? true : false,
-        prodCategories : response ? response : 'cannot get all product-category'
+        prodCategories : response ? response : 'Không thể có được tất cả danh mục sản phẩm'
     })
 })
 
@@ -22,7 +22,7 @@ const updateCategory = asyncHandler(async(req,res)=>{
     const response = await ProductCategory.findByIdAndUpdate(pCid,req.body,{new : true})
     return res.status(200).json({
         response : response ? true : false,
-        updatedCategory : response ? response : 'cannot update  product-category'
+        updatedCategory : response ? response : 'Không thể cập nhật danh mục sản phẩm'
     })
 })
 
@@ -31,7 +31,7 @@ const deleteCategory = asyncHandler(async(req,res)=>{
     const response = await ProductCategory.findOneAndDelete(pCid)
     return res.status(200).json({
         response : response ? true : false,
-        deletedCategory : response ? response : 'cannot delete product-category'
+        deletedCategory : response ? response : 'Không thể xóa danh mục sản phẩm'
     })
 })
 

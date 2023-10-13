@@ -4,14 +4,14 @@ const asyncHandler = require('express-async-handler');
 
 const createNewCoupon = asyncHandler(async(req,res)=>{
     const {name,discount,expiry} = req.body;
-    if(!name || !discount || !expiry) throw new Error('Missing inputs')
+    if(!name || !discount || !expiry) throw new Error('Không được để trống')
     const response = await Coupon.create({
         ...req.body,
         expiry : Date.now() + +expiry*24*60*60*1000,
     });
     return res.status(200).json({
         success : response ? true : false,
-        createdCoupon : response ? response : 'cannot create new Coupon '
+        createdCoupon : response ? response : 'Không thể tạo Phiếu giảm giá mới'
     })
 })
 
@@ -19,18 +19,18 @@ const getCoupons = asyncHandler(async(req,res)=>{
     const coupon = await Coupon.find().select('-createdAt -updatedAt');
     return res.status(200).json({
         success : coupon ? true : false,
-        coupons : coupon ? coupon : 'cannot get coupon'
+        coupons : coupon ? coupon : 'Không thể nhận được phiếu giảm giá'
     })
 })
 
 const updateCoupon = asyncHandler(async(req,res)=>{
     const {cid} = req.params;
-    if(Object.keys(req.body).length === 0) throw new Error('Missing input')
+    if(Object.keys(req.body).length === 0) throw new Error('Không được để trống')
     if(req.body.expiry) req.body.expiry = Date.now() + +req.body.expiry*24*60*60*1000;
     const response = await Coupon.findByIdAndUpdate(cid,req.body,{new : true});
     return res.status(200).json({
         response : response ? true : false,
-        updatedCoupon : response ? response : 'cannot updated coupon',
+        updatedCoupon : response ? response : 'Không thể cập nhật phiếu giảm giá',
     })
 })
 
@@ -39,7 +39,7 @@ const deleteCoupon = asyncHandler(async(req,res)=>{
     const response = await Coupon.findByIdAndDelete(cid);
     return res.status(200).json({
         success : response ? true : false,
-        deletedCoupon : response ? response : 'cannot deleted coupon'
+        deletedCoupon : response ? response : 'Không thể xóa phiếu giảm giá'
     })
 })
 

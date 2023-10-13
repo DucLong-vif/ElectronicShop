@@ -5,12 +5,12 @@ const slugify = require('slugify');
 
 
 const createProduct = asyncHandler(async(req,res)=>{
-    if(Object.keys(req.body).length === 0) throw new Error('Missing inputs');
+    if(Object.keys(req.body).length === 0) throw new Error('Không được để trống');
     if(req.body && req.body.title) req.body.slug = slugify(req.body.title);
     const newProduct = await Product.create(req.body);
     return res.status(200).json({
         success : newProduct ? true : false,
-        createdProduct : newProduct ? newProduct : 'Cannot create new product',
+        createdProduct : newProduct ? newProduct : 'Không thể tạo sản phẩm mới',
     })
 })
 
@@ -19,7 +19,7 @@ const getProduct = asyncHandler(async(req,res)=>{
     const product =await Product.findById(pid);
     return res.status(200).json({
         success : product ? true : false,
-        productData : product ? product : 'cannot get product'
+        productData : product ? product : 'không thể lấy được sản phẩm'
     })
 })
 
@@ -69,7 +69,7 @@ const getAllProducts = asyncHandler(async(req,res)=>{
         const counts = await Product.find(formatQueries).countDocuments();
         return res.status(200).json({
             success : response ? true : false,
-            products : response ? response : 'cannot get all products',
+            products : response ? response : 'Không thể lấy được tất cả các sản phẩm',
             counts : counts,
         })
     }).catch((err)=>{
@@ -82,7 +82,7 @@ const updateProduct = asyncHandler(async(req,res)=>{
     const updateProduct = await Product.findByIdAndUpdate(pid,req.body,{new : true})
     return res.status(200).json({
         success: updateProduct ? true : false,
-        upProduct : updateProduct ? updateProduct : 'cannot update product'
+        upProduct : updateProduct ? updateProduct : 'Không thể cập nhật sản phẩm'
     })
 })
 
@@ -91,14 +91,14 @@ const deleteProduct = asyncHandler(async(req,res)=>{
     const deleteProduct = await Product.findByIdAndDelete(pid)
     return res.status(200).json({
         success : deleteProduct ? true : false,
-        deleteProd : deleteProduct ? deleteProduct : 'cannot delete product'
+        deleteProd : deleteProduct ? deleteProduct : 'Không thể xóa sản phẩm'
     })
 })
 
 const ratings = asyncHandler(async(req,res)=>{
     const {_id} = req.user;
     const {star,comment,pid} = req.body;
-    if(!star || !pid) throw new Error('Messing inputs')
+    if(!star || !pid) throw new Error('Không được để trống')
     //
     const ratingProduct = await Product.findById(pid);
     const alreadyRating = ratingProduct?.ratings?.find(el =>el.postedBy.toString() === _id);
@@ -129,11 +129,11 @@ const ratings = asyncHandler(async(req,res)=>{
 
 const uploadImageProduct = asyncHandler(async(req,res)=>{
     const {pid} = req.params;
-    if(!req.files) throw new Error('Missing inputs');
+    if(!req.files) throw new Error('Không được để trống');
     const response = await Product.findByIdAndUpdate(pid,{$push:{images:{$each: req.files.map(el => el.path)}}},{new : true});
     return res.status(200).json({
         statusCode: response ? true : false,
-        uploadImage : response ? response : 'cannot upload image product',
+        uploadImage : response ? response : 'không thể tải lên hình ảnh sản phẩm',
     })
 })
 

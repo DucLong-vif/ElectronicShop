@@ -4,21 +4,21 @@ const asyncHandler = require('express-async-handler');
 
 const createNewBlog = asyncHandler(async(req,res)=>{
     const {title,description,category} = req.body;
-    if(!title || !description || !category) throw new Error('Messing inputs')
+    if(!title || !description || !category) throw new Error('Không được để trống')
     const response = await Blog.create(req.body);
     return res.status(200).json({
         success : response ? true : false,
-        createdBlog : response ? response : 'cannot create new blog '
+        createdBlog : response ? response : 'Không thể tạo mới một blog'
     })
 })
 
 const updateBlog = asyncHandler(async(req,res)=>{
     const {bid} = req.params;
-    if(Object.keys(req.body).length === 0) throw new Error('Messing inputs')
+    if(Object.keys(req.body).length === 0) throw new Error('Không được để trống')
     const response = await Blog.findByIdAndUpdate(bid,req.body,{new : true});
     return res.status(200).json({
         success : response ? true : false,
-        updatedBlog : response ? response : 'cannot update blog '
+        updatedBlog : response ? response : 'Không thể cập nhật một Blog '
     })
 })
 
@@ -27,7 +27,7 @@ const getBlogs = asyncHandler(async(req,res)=>{
     const response = await Blog.find();
     return res.status(200).json({
         success : response ? true : false,
-        getBlogs : response ? response : 'cannot get all blog'
+        getBlogs : response ? response : 'Không thể lấy tất cả các Blog'
     })
 })
 
@@ -41,7 +41,7 @@ const getBlogs = asyncHandler(async(req,res)=>{
 const likeBlog = asyncHandler(async(req,res)=>{
     const {_id} = req.user;
     const {bid} = req.params;
-    if(!bid) throw new Error('Messing inputs');
+    if(!bid) throw new Error('Không được để trống');
     const blog = await Blog.findById(bid);
     const alreadyDisliked = blog?.dislikes.find(el => el.toString() === _id );
     if(alreadyDisliked){
@@ -71,7 +71,7 @@ const likeBlog = asyncHandler(async(req,res)=>{
 const dislikeBlog = asyncHandler(async(req,res) =>{
     const {_id} = req.user;
     const {bid} = req.params;
-    if(!bid) throw new Error('Messing inputs');
+    if(!bid) throw new Error('Không được để trống');
     const blog = await Blog.findById(bid);
     const alreadyLiked = blog?.likes.find(el => el.toString() === _id );
     if(alreadyLiked){
@@ -113,17 +113,17 @@ const deleteBlog = asyncHandler(async(req,res)=>{
     const blog = await Blog.findByIdAndDelete(bid);
     return res.status(200).json({
         success : blog ? true : false,
-        deletedBlog : blog || 'something went wrong',
+        deletedBlog : blog || 'Đã xảy ra sự cố',
     })
 })
 
 const uploadImageBlog = asyncHandler(async(req,res)=>{
     const {bid} = req.params;
-    if(!req.file) throw new Error('Missing inputs');
+    if(!req.file) throw new Error('Không được để trống');
     const response = await Blog.findByIdAndUpdate(bid,{image:req.file.path},{new : true});
     return res.status(200).json({
         statusCode: response ? true : false,
-        uploadImage : response ? response : 'cannot upload image Blog',
+        uploadImage : response ? response : 'không thể tải hình ảnh lên Blog',
     })
 })
 module.exports = {

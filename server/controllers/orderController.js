@@ -23,7 +23,7 @@ const createOrder = asyncHandler(async(req,res)=>{
     const rs = await Order.create(createData);
     return res.status(200).json({
         success : rs ? true : false,
-        createdCart : rs ? rs : 'something went wrong',
+        createdCart : rs ? rs : 'Đã xảy ra sự cố',
     })
 })
 
@@ -31,11 +31,11 @@ const createOrder = asyncHandler(async(req,res)=>{
 const updateStatus = asyncHandler(async(req,res)=>{
     const {oid} = req.params;
     const {status} = req.body;
-    if(!status) throw new Error('Missing input');
+    if(!status) throw new Error('Không được để trống');
     const response = await Order.findByIdAndUpdate(oid,{status},{new : true});
     return res.status(200).json({
         success : response ? true : false,
-        updatedStatus : response ? response : 'something went wrong',
+        updatedStatus : response ? response : 'Đã xảy ra sự cố',
     })
 })
 
@@ -45,7 +45,7 @@ const getUserOrder = asyncHandler(async(req,res)=>{
     const response = await Order.find({orderBy:_id});
     return res.status(200).json({
         success : response ? true : false,
-        updatedStatus : response ? response : 'something went wrong',
+        updatedStatus : response ? response : 'Đã xảy ra sự cố',
     })
 })
 
@@ -53,7 +53,7 @@ const getOrders = asyncHandler(async(req,res)=>{
     const response = await Order.find();
     return res.status(200).json({
         success : response ? true : false,
-        updatedStatus : response ? response : 'something went wrong',
+        updatedStatus : response ? response : 'Đã xảy ra sự cố',
     })
 })
 
