@@ -127,15 +127,11 @@ const Login = () => {
           onChange={ e => setEmail(e.target.value)}
         />
         <div className='flex items-center justify-between w-full'>
-          <Button
-            name='Back'
-            handlOnclick={() => setIsForgotPassword(false)}
-          />
-          <Button
-            name='submit'
-            handlOnclick={handlForgotPassword}
-            style = {`px-4 py-2 rounded-md text-white my-2 bg-blue-500 text-semibold`}
-          />
+          <Button handlOnclick={() => setIsForgotPassword(false)}>Thoát</Button>
+          <Button 
+           handlOnclick={handlForgotPassword}
+           style = {`px-4 py-2 rounded-md text-white my-2 bg-blue-500 text-semibold`}
+          >Gửi</Button>
         </div>
       </div>
     </div>
@@ -191,11 +187,10 @@ const Login = () => {
           invalidFields={invalidFields}
           setInvalidFields={setInvalidFields}
           />
-          <Button
-          name={isRegister ? 'Đăng ký' : 'Đăng nhập'}
+          <Button 
           handlOnclick={handleSubmit}
           fw
-          />
+          >{isRegister ? 'Đăng ký' : 'Đăng nhập'}</Button>
           <div className='flex items-center justify-between my-2 w-full text-sm'>
             {!isRegister && <span onClick={() => setIsForgotPassword(true)} className='text-blue-500 hover:underline cursor-pointer'>Quên mật khẩu</span>}
             {!isRegister && 

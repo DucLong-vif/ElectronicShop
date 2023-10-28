@@ -14,4 +14,22 @@ export {default as TopHeader} from './TopHeader';
 export {default as Footer} from './Footer';
 export {default as InputField} from './InputField';
 export {default as Button} from './Button';
+export {default as Breadcrumbd} from './Breadcrumbd';
+export {default as SelectQuantity} from './SelectQuantity';
+export {default as ProductExtraInfo} from './ProductExtraInfo';
+export {default as Productinfortion} from './Productinfortion';
+export {default as SearchItems} from './SearchItems';
+export {default as InputSelect} from './InputSelect';
+export {default as Votebar} from './EvaluateProduct/Votebar';
+export {default as Ratings} from './EvaluateProduct/Ratings';
+export {default as VoteOptions} from './EvaluateProduct/VoteOptions';
+export {default as Comment} from './EvaluateProduct/Comment';
+export {default as Modal} from './Modal/Modal';
+export {default as Pagination} from './Pagination/Pagination';
+export {default as PaginationItem} from './Pagination/PaginationItem';
+
+
+
+
+
 

@@ -27,10 +27,9 @@ const ResetPassword = () => {
           onChange={ e => setPassword(e.target.value)}
         />
         <div className='flex items-center justify-between w-full'>
-          <Button
-            name='submit'
-            handlOnclick={handlResetPassword}
-          />
+          <Button handlOnclick={handlResetPassword}>
+            Xác nhận
+          </Button>
         </div>
       </div>
     </div>

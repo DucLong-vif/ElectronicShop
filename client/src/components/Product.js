@@ -6,16 +6,16 @@ import {renderStarFromNumber} from '../ultils/helpers';
 import {SelectOption} from './'
 import icon from '../ultils/icons';
 import {Link} from 'react-router-dom';
-import path from '../ultils/path'
+// import path from '../ultils/path'
 
 const {AiFillEye,GiHamburgerMenu,BsSuitHeartFill} = icon;
 
-const Product = ({productData, isNew}) => {
+const Product = ({productData, isNew,normal}) => {
   const [isShowOption, setisShowOption] = useState(false)
   return (
     <div className='w-full text-base px-[10px]'>
       <Link className='w-full border p-[15px] flex flex-col items-center'
-      to={`/${path.DETAIL_PRODUCT}/${productData?._id}/${productData?.title}`}
+      to={`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`}
       onMouseEnter={e => {
         e.stopPropagation();
         setisShowOption(true)
@@ -34,10 +34,12 @@ const Product = ({productData, isNew}) => {
           </div>
           }
         <img src={productData?.thumb || ' '} alt='images' className='w-[274px] h-[274px] object-contain'/>
-        <img src={isNew ? lable : trending} alt='' className={`absolute 
-        ${isNew ? 
-        'top-[-15px] right-[-14px] w-[100px] h-[35px] object-cover' 
-        : 'top-[-32px] right-[-14px] w-[100px] h-[85px]'}`}/>
+        {!normal && 
+          <img src={isNew ? lable : trending} alt='' className={`absolute 
+          ${isNew ? 
+          'top-[-15px] right-[-14px] w-[100px] h-[35px] object-cover' 
+          : 'top-[-32px] right-[-14px] w-[100px] h-[85px]'}`}/>
+        }
         <span className={`absolute bold top-[-10px] right-[7px] text-white ${isNew ? '' : 'text-sm top-[-8px] right-[1px]'}`}>{isNew ? 'New' : 'Trending'}</span>
         </div>
         <div className='flex flex-col gap-1 mt-[15px] items-start w-full'>

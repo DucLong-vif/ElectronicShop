@@ -16,7 +16,13 @@ const createProduct = asyncHandler(async(req,res)=>{
 
 const getProduct = asyncHandler(async(req,res)=>{
     const {pid} = req.params;
-    const product =await Product.findById(pid);
+    const product =await Product.findById(pid).populate({
+        path : 'ratings',
+        populate : {
+            path : 'postedBy',
+            select : 'firstName lastName avatar'
+        }
+    });
     return res.status(200).json({
         success : product ? true : false,
         productData : product ? product : 'không thể lấy được sản phẩm'
@@ -34,9 +40,17 @@ const getAllProducts = asyncHandler(async(req,res)=>{
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g,matchEl=>`$${matchEl}`)
     const formatQueries = JSON.parse(queryString)
 
+    let colorQueryObject = {};
     //Filtering
-    if(queries?.title) formatQueries.title = {$regex : queries.title, $options : 'i'}
-    let queryCommand = Product.find(formatQueries)
+    if(queries?.title) formatQueries.title = {$regex : queries.title, $options : 'i'};
+    if(queries?.category) formatQueries.category = {$regex : queries.category, $options : 'i'}
+    if(queries?.color){
+        delete formatQueries.color;
+        const colorQuery =queries.color?.split(',').map(el => ({color : {$regex : el, $options : 'i'}}))
+        colorQueryObject = {$or : colorQuery}
+    }
+    const query = {...colorQueryObject,...formatQueries}
+    let queryCommand = Product.find(query)
 
 
 
@@ -66,7 +80,7 @@ const getAllProducts = asyncHandler(async(req,res)=>{
     //Execute query
     //số lượng sp thỏa mãn điều kiện !== số lượng trả về 1 lần gọi APi
     queryCommand.then(async(response)=>{
-        const counts = await Product.find(formatQueries).countDocuments();
+        const counts = await Product.find(query).countDocuments();
         return res.status(200).json({
             success : response ? true : false,
             products : response ? response : 'Không thể lấy được tất cả các sản phẩm',
@@ -97,7 +111,7 @@ const deleteProduct = asyncHandler(async(req,res)=>{
 
 const ratings = asyncHandler(async(req,res)=>{
     const {_id} = req.user;
-    const {star,comment,pid} = req.body;
+    const {star,comment,pid, updatedAt} = req.body;
     if(!star || !pid) throw new Error('Không được để trống')
     //
     const ratingProduct = await Product.findById(pid);
@@ -107,12 +121,12 @@ const ratings = asyncHandler(async(req,res)=>{
         await Product.updateOne({
             ratings : {$elemMatch : alreadyRating}
         },{
-            $set : { "ratings.$.star" : star, "ratings.$.comment" : comment, "ratings.$.pid" : pid}
+            $set : { "ratings.$.star" : star, "ratings.$.comment" : comment, "ratings.$.pid" : pid,"ratings.$.updatedAt" : updatedAt}
         },{new : true})
     }
     else{
         //add star  & comment
-        await Product.findByIdAndUpdate(pid,{$push:{ratings :{star,comment,postedBy : _id}}},{new : true})
+        await Product.findByIdAndUpdate(pid,{$push:{ratings :{star,comment,postedBy : _id,updatedAt}}},{new : true})
     }
     //sum ratings 
     const updatedProduct = await Product.findById(pid);

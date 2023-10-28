@@ -16,6 +16,9 @@ var userSchema = new mongoose.Schema({
         required:true,
         unique:true,
     },
+    avatar:{
+        type:String,
+    },
     phoneNumber:{
         type:String,
         required:true,

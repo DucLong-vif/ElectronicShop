@@ -1,6 +1,6 @@
 import React,{memo} from 'react'
 
-const Button = ({name,handlOnclick,style,iconBefore,iconAfter,fw}) => {
+const Button = ({children,handlOnclick,style,fw}) => {
   return (
     <div className='w-full flex items-center justify-center'>
         <button
@@ -10,9 +10,7 @@ const Button = ({name,handlOnclick,style,iconBefore,iconAfter,fw}) => {
             handlOnclick && handlOnclick();
         }}
         >
-            {iconBefore}
-            <span>{name}</span>
-            {iconAfter}
+            {children}   
         </button>
     </div>
   )

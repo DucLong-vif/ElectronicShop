@@ -8,6 +8,10 @@ module.exports = {
     fontFamily :{
       main :['Poppins', 'sans-serif;']
     },
+    listStyleType: {
+      square: 'square',
+      roman: 'upper-roman',
+    },
     extend: {
       width:{
         main:'1220px'
@@ -59,5 +63,10 @@ module.exports = {
   },
   plugins: [
     //require("@tailwindcss/line-clamp"), 
+    require("@tailwindcss/forms")({
+      // strategy: 'base', // only generate global styles
+      //strategy: 'class', // only generate classes
+    }),
   ],
+  mode :'jit'
 }

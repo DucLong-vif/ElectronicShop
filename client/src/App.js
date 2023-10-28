@@ -3,21 +3,24 @@ import {Route,Routes} from 'react-router-dom';
 import {Login,Home,Publics,FAQ,Services,DetailProduct,Blogs,Products,FinalRegister,ResetPassword} from './pages/public';
 import path from './ultils/path';
 import {getCategories} from './store/app/asyncActions';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Modal } from './components';
 function App() {
   const dispatch = useDispatch();
+  const {isShowModal,modalChildren} = useSelector(state => state.app)
   useEffect(()=>{
     dispatch(getCategories());
   },[dispatch])
   return (
-    <div className="min-h-screen font-main">
+    <div className="min-h-screen font-main relative">
+      {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
         <Route path={path.PUBLIC} element={<Publics/>}>
           <Route path={path.HOME} element={<Home/>}/>
           <Route path={path.BLOGS} element={<Blogs/>}/>
-          <Route path={path.DETAIL_PRODUCT__PID_TITLE} element={<DetailProduct/>}/>
+          <Route path={path.DETAIL_PRODUCT__CATEGORY__PID_TITLE} element={<DetailProduct/>}/>
           <Route path={path.FAQ} element={<FAQ/>}/>
           <Route path={path.OUR_SERVICES} element={<Services/>}/>
           <Route path={path.PRODUCTS} element={<Products/>}/>

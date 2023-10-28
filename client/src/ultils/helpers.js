@@ -5,6 +5,7 @@ export const formatMoney = number => Number(number?.toFixed(1)).toLocaleString()
 export const renderStarFromNumber = (number,size) => {
     if(!Number(number)) return;
     const star = [];
+    number = Math.round(number);
     for(let i  = 0; i < +number; i++) star.push(<icon.AiFillStar color='orange' size={size || 16}/>);
     for(let i  = 5; i > +number; i--) star.push(<icon.AiOutlineStar color='orange' size={size || 16}/>);
     return star;
@@ -38,9 +39,9 @@ export const validate = (payload,setInvalidFields) =>{
                 }
                 break;
             case 'password':
-                if(arr[1].length < 8){
+                if(arr[1].length < 6){
                     invalids ++;
-                    setInvalidFields(prev => [...prev,{name : arr[0],mes:'Mật khẩu tối thiểu 8 ký tự'}])
+                    setInvalidFields(prev => [...prev,{name : arr[0],mes:'Mật khẩu tối thiểu 6 ký tự'}])
                 }
                 if(arr[1].length > 12){
                     invalids ++;
@@ -59,4 +60,13 @@ export const validate = (payload,setInvalidFields) =>{
         }
     }
     return invalids
+}
+
+
+export const formatPrice = number => Math.round(number / 1000) * 1000;
+
+
+export const generateRange = (start,end) => {
+    const length = end + 1 - start;
+    return Array.from({length},(_,index)=> start + index)
 }
