@@ -1,10 +1,10 @@
 import React,{useState} from 'react'
-import {formatMoney} from '../ultils/helpers'
-import lable from '../assets/lable.png'
-import trending from '../assets/trending_1.png';
-import {renderStarFromNumber} from '../ultils/helpers';
-import {SelectOption} from './'
-import icon from '../ultils/icons';
+import {formatMoney} from '../../ultils/helpers'
+import lable from '../../assets/lable.png'
+import trending from '../../assets/trending_1.png';
+import {renderStarFromNumber} from '../../ultils/helpers';
+import {SelectOption} from '..'
+import icon from '../../ultils/icons';
 import {Link} from 'react-router-dom';
 // import path from '../ultils/path'
 

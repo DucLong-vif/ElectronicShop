@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { apiGetProduct } from "../apis/product";
-import { CustomSlider } from ".";
-import bannerOne from '../assets/bannerOne.png';
-import bannerTwo from '../assets/bannerTwo.png';
-import { getNewProducts } from "../store/products/asyncActions";
+import { apiGetProduct } from "../../apis/product";
+import { CustomSlider } from "..";
+import bannerOne from '../../assets/bannerOne.png';
+import bannerTwo from '../../assets/bannerTwo.png';
+import { getNewProducts } from "../../store/products/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
 
 

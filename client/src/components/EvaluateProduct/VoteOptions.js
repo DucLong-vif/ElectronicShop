@@ -12,7 +12,7 @@ const VoteOptions = ({nameProduct,handleSumitVoteOption}) => {
     },[]);
   return (
     <div onClick={e => e.stopPropagation()} ref={ref} className='bg-white w-[700px] p-4 flex flex-col gap-4 items-center justify-center'>
-        <img src={`https://trutien.gamota.com/wp-content/uploads/2022/01/logo-tru-tien-final.png`} alt='' 
+        <img src={`https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:80/plain/https://cellphones.com.vn/media/wysiwyg/Voucher.gif`} alt='' 
             className='w-[300px] object-cover my-8'
         />
         <h2 className='text-center text-medium text-lg font-semibold'>{`Đánh giá sản phẩm : ${nameProduct}`}</h2>

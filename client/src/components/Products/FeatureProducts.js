@@ -1,10 +1,10 @@
 import React,{useState,useEffect} from 'react';
-import {ProductCard} from './'
-import { apiGetProduct } from '../apis/product';
-import banner1 from '../assets/banner_1_bottom.png';
-import banner2 from '../assets/banner_2_bottom.png';
-import banner3 from '../assets/banner_3_bottom.png';
-import banner4 from '../assets/banner_4_bottom.png';
+import {ProductCard} from '..'
+import { apiGetProduct } from '../../apis/product';
+import banner1 from '../../assets/banner_1_bottom.png';
+import banner2 from '../../assets/banner_2_bottom.png';
+import banner3 from '../../assets/banner_3_bottom.png';
+import banner4 from '../../assets/banner_4_bottom.png';
 const FeatureProducts = () => {
     const [products,setProducts] = useState(null);
 

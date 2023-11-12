@@ -1,8 +1,8 @@
 import React,{useState,useEffect,memo} from 'react';
-import icons from '../ultils/icons';
-import { apiGetProduct } from '../apis/product';
-import {renderStarFromNumber,formatMoney,secondsTohHms} from '../ultils/helpers';
-import {Countdown} from './'
+import icons from '../../ultils/icons';
+import { apiGetProduct } from '../../apis/product';
+import {renderStarFromNumber,formatMoney,secondsTohHms} from '../../ultils/helpers';
+import {Countdown} from '..'
 import moment from 'moment'
 
 const {AiFillStar,GiHamburgerMenu} = icons;

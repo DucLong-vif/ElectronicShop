@@ -5,7 +5,8 @@ import { Breadcrumbd,Button,SelectQuantity,ProductExtraInfo,Productinfortion,Cus
 import Slider from "react-slick";
 import ReactImageMagnify from 'react-image-magnify';
 import {formatMoney,formatPrice,renderStarFromNumber} from '../../ultils/helpers';
-import {productExtraInformation} from '../../ultils/contants'
+import {productExtraInformation} from '../../ultils/contants';
+import DOMPurify from 'dompurify';
 const settings = {
   dots: false,
   infinite: false,
@@ -46,7 +47,7 @@ const DetailProduct = () => {
 
   useEffect(()=>{
     if(pid) fetchProductData();
-  },[updateVote])
+  },[updateVote,pid])
 
   const rerender = useCallback(()=>{
     setUpdateVote(!updateVote)
@@ -127,9 +128,14 @@ const DetailProduct = () => {
             <span className='text-sm text-main italic'>{`(Đã bán : ${Product?.sold})`}</span>
           </div>
           <ul className='pl-4 list-square text-sm text-gray-700'>
-            {Product?.description?.map((el,index) => (
-              <li className='leading-6' key={index}>{el}</li>
-            ))}
+            {Product?.description?.length > 1 && 
+              Product?.description?.map((el,index) => (
+                <li className='leading-6' key={index}>{el}</li>
+              ))
+            }
+            {Product?.description?.length === 1 && <div 
+              className='text-sm justify-center'
+              dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(Product?.description[0])}}></div>}
           </ul>
           <div className='flex flex-col gap-8'>
             <div className='flex items-center h-[34px]'>

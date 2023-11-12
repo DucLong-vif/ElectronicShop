@@ -188,3 +188,67 @@ export const voteOptions = [
     text : 'Tuyệt vời'
   },
 ]
+
+const {AiOutlineDashboard, MdGroups2 , FaProductHunt, FaFirstOrder} = icons;
+export const adminSidebar = [
+  {
+    id : 1,
+    type : 'SINGLE',
+    text : 'Thống kê',
+    path : `/${path.ADMIN}/${path.DASHBOARD}`,
+    icon : <AiOutlineDashboard size={20}/>
+  },
+  {
+    id : 2,
+    type : 'SINGLE',
+    text : 'Quản lý người dùng',
+    path : `/${path.ADMIN}/${path.MANAGE_USER}`,
+    icon : <MdGroups2 size={20}/>
+  },
+  {
+    id : 3,
+    type : 'PARENT',
+    text : 'Quản lý sản phẩm',
+    icon : <FaProductHunt size={20}/>,
+    submenu : [
+      {
+        text : 'Tạo sản phẩm',
+        path : `/${path.ADMIN}/${path.CREATE_PRODUCT}`
+      },
+      {
+        text : 'Quản lý sản phẩm',
+        path : `/${path.ADMIN}/${path.MANAGE_PRODUCTS}`
+      },
+    ]
+  },
+  {
+    id : 4,
+    type : 'SINGLE',
+    text : 'Quản lý giỏ hàng',
+    path : `/${path.ADMIN}/${path.MANAGE_ORDER}`,
+    icon : <FaFirstOrder size={20}/>
+  },
+]
+
+
+export const roles = [
+  {
+    code: 1978,
+    value:'Admin' 
+},
+{
+    code: 2000,
+    value:'User' 
+},
+]
+
+export const blockStatus = [
+  {
+    code: true,
+    value:'Blocked' 
+},
+{
+    code: false,
+    value:'Active' 
+},
+]

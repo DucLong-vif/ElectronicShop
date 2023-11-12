@@ -1,17 +1,18 @@
 import React,{memo,useState,useEffect,useCallback} from 'react'
-import icons from '../ultils/icons';
-import { colors } from '../ultils/contants';
-import {createSearchParams,useNavigate,useParams} from 'react-router-dom';
-import { apiGetProduct } from '../apis';
-import {Button} from './'
+import icons from '../../ultils/icons';
+import { colors } from '../../ultils/contants';
+import {createSearchParams,useNavigate,useParams, useSearchParams} from 'react-router-dom';
+import { apiGetProduct } from '../../apis';
+import {Button} from '..'
 const {AiOutlineDown} = icons;
 
 const SearchItems = ({name,activeClick,changeActiveFilter,type = 'checkbox'}) => {
-   const navigate = useNavigate();
-   const {category} = useParams();
+  const navigate = useNavigate();
+  const {category} = useParams();
   const [selected, setSelected] = useState([]);
   const [checkFormTo, setCheckFormTo] = useState('')
   const [bestPrice, setBestPrice] = useState(null);
+  const [params] = useSearchParams()
   const [price, setPrice] = useState({
     from : '',
     to : ''
@@ -27,17 +28,19 @@ const SearchItems = ({name,activeClick,changeActiveFilter,type = 'checkbox'}) =>
     if(response.success) setBestPrice(response.products[0]?.price)
   }
   useEffect(() =>{
+    let param = [];
+    for(let i of params.entries()) param.push(i);
+    const queries = {};
+    for(let i of param) queries[i[0]] = i[1];
     if(selected.length > 0){
-      navigate({
-        pathname : `/${category}`,
-        search:createSearchParams({
-          color : selected.join(',')
-        }).toString(),
-      });
-    }else{
-      navigate(`/${category}`)
-    }
-  },[selected,category,navigate]);
+      queries.color = selected.join(',')
+      queries.page = 1;    
+    }else delete queries.color
+    navigate({
+      pathname : `/${category}`,
+      search:createSearchParams(queries).toString(),
+    });
+  },[selected,category,navigate,params]);
   useEffect(()=>{
     if(type === 'input') {
       fetchBestPriceProduct();
@@ -55,7 +58,9 @@ const SearchItems = ({name,activeClick,changeActiveFilter,type = 'checkbox'}) =>
       setCheckFormTo('')
       const data = {}
       if(Number(price.from) > 0) data.from = price.from;
+      else delete data.from;
       if(Number(price.to) > 0) data.to = price.to;
+      else delete data.to;
       navigate({
         pathname : `/${category}`,
         search : createSearchParams(data).toString(),

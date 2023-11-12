@@ -25,11 +25,8 @@ const Products = () => {
   }
   const {category } = useParams();
   useEffect(()=>{
-    let param = [];
-    for(let i of params.entries()) param.push(i);
-    const queries = {};
+    const queries = Object.fromEntries([...params]);
     let priceQuery = {};
-    for(let i of params) queries[i[0]] = i[1];
     if(queries.to && queries.from){
       priceQuery = {
         $and : [
@@ -38,9 +35,10 @@ const Products = () => {
         ]
       }
       delete queries.price
+    }else{
+      if(queries.from) queries.price = {gte : queries.from};
+      if(queries.to) queries.price = {lte : queries.to};
     }
-    if(queries.from) queries.price = {gte : queries.from};
-    if(queries.to) queries.price = {lte : queries.to};
     delete queries.from;
     delete queries.to;
     const q = {...priceQuery,...queries}
@@ -116,7 +114,7 @@ const Products = () => {
       </div>
       <div className=' my-4 flex justify-center'>
         <Pagination
-          totalCount={products?.counts}
+          totalCount={products?.counts}   
         />
       </div>
       <div className='h-[500px]'></div>

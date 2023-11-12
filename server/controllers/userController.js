@@ -6,6 +6,8 @@ const crypto = require('crypto')
 const {generateAccessToken,generateRefreshToken} = require('../middleware/jwtHandler');
 const makeToken = require('uniqid');
 
+const {users} = require('../utils/constant');
+
 // const register = asyncHandler(async(req,res)=>{
 //     const {email,password,firstName,lastName,phoneNumber} = req.body;
 //     if(!email || !password || !firstName || !lastName||!phoneNumber){
@@ -157,7 +159,7 @@ const login = asyncHandler(async(req,res)=>{
 
 const getCurrent = asyncHandler(async(req,res)=>{
     const {_id} = req.user;
-    const user = await User.findById({ _id: _id}).select('-password -refreshToken -role')
+    const user = await User.findById({ _id: _id}).select('-password -refreshToken')
     return res.status(200).json({
         success : user ? true : false,
         rs : user ? user : 'Không tìm thấy người dùng này'
@@ -236,22 +238,68 @@ const resetPassword = asyncHandler(async (req, res) => {
 })
 
 
-const getUsers = asyncHandler(async (req,res)=>{
-    const response = await User.find().select('-password -refreshToken -role');
-    return res.status(200).json({
-        success : response ? true : false,
-        users  : response,
+const getUsers = asyncHandler(async (req,res)=>{  
+    const queries = {...req.query}
+    const excludeFields = ['limit','sort','page','fields']
+    excludeFields.forEach(el => delete queries[el]);
+    let queryString = JSON.stringify(queries)
+    queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g,matchEl=>`$${matchEl}`)
+    const formatQueries = JSON.parse(queryString)
+    //Filtering
+    if(queries?.name) formatQueries.name = {$regex : queries.name, $options : 'i'};
+    if(req.query.q){
+        delete formatQueries.q;
+        formatQueries['$or'] = [
+            {firstName : {$regex : req.query.q, $options :'i'}},
+            {lastName : {$regex : req.query.q, $options :'i'}},
+            {email : {$regex : req.query.q, $options :'i'}},
+        ]
+    }
+    let queryCommand = User.find(formatQueries)
+    //Sorting
+    //split abc,xyz => [abc,xyz] join => abc xyz
+    if(req.query.sort){
+        const sortBy = req.query.sort.split(',').join(' ')
+        queryCommand = queryCommand.sort(sortBy)
+    }
+
+
+    //Fields limiting
+    if(req.query.fields){
+        const fields = req.query.fields.split(',').join(' ');
+        queryCommand = queryCommand.select(fields);
+    }
+    //pagination
+    //limit : số object lấy 1 gọi API
+    //skip : bỏ qua  số phần tử muốn lấy : 2
+    //vd  123 ... 10 bỏ qua 1 2 lấy từ 3 trở đi
+    const page = +req.query.page || 1
+    const limit = +req.query.limit || process.env.LIMIT_USERS;
+    const skip = (page - 1)*limit;
+    queryCommand.skip(skip).limit(limit);
+
+    //Execute query
+    //số lượng sp thỏa mãn điều kiện !== số lượng trả về 1 lần gọi APi
+    queryCommand.then(async(response)=>{
+        const counts = await User.find(formatQueries).countDocuments();
+        return res.status(200).json({
+            success : response ? true : false,
+            users : response ? response : 'Không thể lấy được tất cả các người dùng',
+            counts : counts,
+        })
+    }).catch((err)=>{
+        console.log(err.reason)
     })
 })
 
 
 const deleteUser = asyncHandler(async(req,res)=>{
-    const {_id} = req.query;
-    if(!_id) throw new Error('Không tìm thấy id này');
-    const response = await User.findByIdAndDelete({_id : _id});
+    const {uid} = req.params;
+    if(!uid) throw new Error('Không tìm thấy id này');
+    const response = await User.findByIdAndDelete({_id : uid});
     return res.status(200).json({
         success : response ? true : false,
-        deletedUser : response ? `Người dùng có email ${response.email} đã xóa`:'không có người dùng nào bị xóa'
+        mes : response ? `Người dùng có email ${response.email} đã xóa`:'không có người dùng nào bị xóa'
     })
 })
 
@@ -271,7 +319,7 @@ const updateUserByAdmin = asyncHandler(async(req,res)=>{
     const response = await User.findByIdAndUpdate(uid,req.body,{new : true}).select('-password -role -refreshToken');
     res.status(200).json({
         success : response ? true : false,
-        updateUserByAD : response ? response :'Đã xảy ra sự cố',
+        mes : response ? 'Cập nhật thành công' :'Đã xảy ra sự cố',
     })
 })
 
@@ -314,6 +362,14 @@ const updateCart = asyncHandler(async(req,res)=>{
     }
 })
 
+const createUsers = asyncHandler(async (req,res) => {
+    const response = await User.create(users);
+    res.status(200).json({
+        success : response ? true : false,
+        createdUser : response ? response : 'Không thể tạo users'
+    })
+})
+
 module.exports = {
     register,
     login,
@@ -328,5 +384,6 @@ module.exports = {
     updateUserByAdmin,
     updateUserAddress,
     updateCart,
-    finalRegister
+    finalRegister,
+    createUsers
 }
